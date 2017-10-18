@@ -28,7 +28,7 @@ public class Bag {
     void orderMagicBag() throws Exception{
         Item item;
         for (int i = 0; i < itemCount; i++) {
-            item = findMaxDimItem();
+            item = findMaxAreaItem();
             itemHolder.remove(item);
 
             Point point = findBestFreeSpaceForItem(item);
@@ -36,12 +36,13 @@ public class Bag {
                 item.rotateItem();
                 point = findBestFreeSpaceForItem(item);
                 if (point == null){
-                    throw new Exception("Hiba az elhelyezésnél");
+                    //System.out.println(item.getNumber() +" "+ item.getDim1()+" "+item.getDim2());
+                    throw new Exception("Hiba az elhelyezesnel");
                 }
             }
 
             putInTheBag(item, point);
-            System.out.println(this.toString() + "\n");
+            //System.out.println(this.toString() + "\n");
         }
     }
 
@@ -68,6 +69,31 @@ public class Bag {
         for (Item item: tmp){//Ha az item terulete nagyobb mint a biggest akkor az legyen a biggest
             if((item.getDim1()*item.getDim2()) > (biggest.getDim1()*biggest.getDim2())){
                 biggest = item;
+            }
+        }
+        return biggest;
+    }
+
+    private Item findMaxAreaItem(){
+        List<Item> tmp = new ArrayList<>();
+        int maxarea = 0;
+        Item biggest;
+
+        for (Item item: itemHolder) {
+            if(item.getDim1()*item.getDim2() > maxarea){
+                maxarea = item.getDim1()*item.getDim2();
+            }
+        }
+        for (Item item: itemHolder) {
+            if (item.getDim1()*item.getDim2() == maxarea)
+                tmp.add(item);
+        }
+        biggest = tmp.get(0);
+        int maxdim = biggest.getDim1() > biggest.getDim2() ? biggest.getDim1() : biggest.getDim2();
+        for (Item item: tmp){//Ha az item dime nagyobb mint a biggeste akkor az legyen a biggest
+            if(item.getDim1() > maxdim || item.getDim2() > maxdim){
+                biggest = item;
+                maxdim = biggest.getDim1() > biggest.getDim2() ? biggest.getDim1() : biggest.getDim2();
             }
         }
         return biggest;
