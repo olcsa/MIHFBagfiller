@@ -28,7 +28,7 @@ public class Bag {
     void orderMagicBag() throws Exception{
         Item item;
         for (int i = 0; i < itemCount; i++) {
-            item = findMaxAreaItem();
+            item = findMaxAreaItemWithBagdimPrio();
             itemHolder.remove(item);
 
             Point point = findBestFreeSpaceForItem(item);
@@ -74,10 +74,17 @@ public class Bag {
         return biggest;
     }
 
-    private Item findMaxAreaItem(){
+    private Item findMaxAreaItemWithBagdimPrio(){ //Ami kitölti a nagyobb bag dimet azt elore veszi
         List<Item> tmp = new ArrayList<>();
         int maxarea = 0;
+        int bagbiggestdim = dim1 > dim2 ? dim1 : dim2;
         Item biggest;
+
+        for (Item item: itemHolder){
+            if(item.getDim1() == bagbiggestdim || item.getDim2() == bagbiggestdim){
+                return item;
+            }
+        }
 
         for (Item item: itemHolder) {
             if(item.getDim1()*item.getDim2() > maxarea){
